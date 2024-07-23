@@ -3,23 +3,37 @@ Me playing around with the helloworld.py code
 """
 
 import wx
+import wx.richtext
 import numpy as np
 import scipy as sp
 
-class BasicCalculator(wx.Frame):
+sizer = wx.BoxSizer(wx.VERTICAL)
+
+class BasicCalculator(wx.Frame): #is the class really necessary?
 
     contents = ""
 
     def __init__(self, parent, title):
-        wx.Frame.__init__(self, parent, title=title, size=(300,300))
+        wx.Frame.__init__(self, parent, title=title, size=(450, 300))
 
-        self.CreateStatusBar() # A Statusbar in the bottom of the window
+        #Create a panel to put all the buttons and text boxes
+        panel = wx.Panel(self)
+        
+        wx.TopLevelWindow.Center(self, wx.BOTH) #center window when it opens
+        wx.TopLevelWindow.SetSizeHints(self, 450, 300, maxW=600, maxH=400) #setting min and max heights
+        
 
         #setting up the sizer. 
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        vertical_layout = wx.BoxSizer(wx.VERTICAL)
         #sizer.Add(wx.Button(self, -1, 'An extremely long button text'), 0, 0, 0)
         #sizer.Add(wx.Button(self, -1, 'Small button'), 0, 0, 0)
-        self.SetSizer(sizer)
+        #self.SetSizer(sizer)
+        #panel.SetSizer(sizer)
+
+        #wx.Panel(self)
+
+        #panel = wx.Panel(self)
+        #self.SetSizerAndFit(self, sizer, deleteOld=True)
 
         # Setting up the menu.
         filemenu= wx.Menu()
@@ -32,42 +46,76 @@ class BasicCalculator(wx.Frame):
         # Creating the menubar.
         menuBar = wx.MenuBar()
         menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
-        self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
-        self.Show(True)
+        #self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
+        #self.Show(True)
 
         #Creating a title
-        st = wx.StaticText(self, label="Basic Calculator", style=wx.ALIGN_CENTRE_HORIZONTAL)
-        sizer.Add(st, 1, wx.ALIGN_CENTER | wx.SHAPED, 0)
+        #st = wx.StaticText(panel, label="Basic Calculator", style=wx.ALIGN_CENTRE_HORIZONTAL)
+        #st = wx.StaticText(self, label="Basic Calculator", style=wx.ALIGN_CENTRE_HORIZONTAL)
+        #vertical_layout.Add(st, 0, wx.ALL |  wx.ALIGN_CENTER, 10)
 
-        #Create a panel for the text entry boxes
-        panel = wx.Panel(self)
+        #heading = wx.richtext.RichTextCtrl(panel, name="Basic Calculator", style=wx.ALIGN_CENTER_HORIZONTAL)
+        #heading_text = "<b><big><span font_family='wx.FONTFAMILY_SWISS'>Basic Calculator</span></big></b>"
+        wx.SetLabelMarkup(heading_text)
+        heading = wx.StaticText(panel, label="Basic Calculator", style=wx.ALIGN_CENTER_HORIZONTAL)
+        heading_font = wx.Font(wx.FontInfo(30).Family(wx.FONTFAMILY_SWISS).Bold())
+        heading.SetLabelMarkup("<b>&ampBed</b> &ampmp "
+                     "<span foreground='red'>breakfast</span> "
+                     "available <big>HERE</big>")
+        #heading.SetLabelMarkup(True)
+
+        vertical_layout.Add(heading, 1, wx.ALIGN_CENTER)
+        
 
         #creating text entry boxes
-        text1 = wx.TextCtrl(self)
-        panel.AddChild(text1)
+        #text1 = wx.TextCtrl(panel)
+        textbox_size = wx.Size(-1,25)
+        #text1 = wx.TextCtrl(panel, size=wx.Size(30,10))
+        #text1 = wx.TextCtrl(panel, size=textbox_size)
+        text1 = wx.TextCtrl(panel)
+        text1.SetMaxSize(textbox_size)
+
+        #panel.AddChild(text1)
         #text1.setLabel("Initial Concen. (mmol/L)")
         text1.SetLabel("Initial Concen. (mmol/L)")
         #text2 = wx.TextCtrl(self, pos = (50,70))
+        #text2 = wx.TextCtrl(panel)
+        #text2 = wx.TextCtrl(panel, size=textbox_size)
         text2 = wx.TextCtrl(panel)
+        text2.SetMaxSize(textbox_size)
         text2.SetLabel("Initial Concen. (mmol/L)")
 
-        sizer.Add(panel, 1, 0, 0)
+        #sizer.Add(panel, 1, 0, 0)
         
         #sizer.Add(text1, 1, wx.ALIGN_CENTER, 50)
         #sizer.Add(text2, 1, wx.ALIGN_CENTER, 50)
-        #sizer.Add(text1, 1, wx.SHAPED | wx.ALL, 20)
-        #sizer.Add(text2, 1, wx.SHAPED | wx.ALL, 20)
+        #vertical_layout.Add(text1, 1, wx.SHAPED | wx.ALL | wx.ALIGN_CENTER, border=20)
+        #vertical_layout.Add(text2, 1, wx.SHAPED | wx.ALL | wx.ALIGN_CENTER, border=20)
+        vertical_layout.Add(text1, 1, wx.ALL | wx.ALIGN_CENTER, border=10)
+        vertical_layout.Add(text2, 1, wx.ALL | wx.ALIGN_CENTER, border=10)
+        #vertical_layout.Add(text1, 1, wx.ALIGN_CENTER, border=20)
+        #vertical_layout.Add(text2, 1, wx.ALIGN_CENTER, border=20)
+        #vertical_layout.Add(text1, 1, 0, border=20)
+        #vertical_layout.Add(text2, 1, 0, border=20)
+        #vertical_layout.Add(text1, 1, 0, 0)
+        #vertical_layout.Add(text2, 1, 0, 0)
 
         #creating the calculate button
         #calcButton = wx.Button(self.panel, label="Calculate", pos = (50,100))
-        calcButton = wx.Button(self, label="Calculate")
+        #calcButton = wx.Button(self, label="Calculate")
+        calcButton = wx.Button(panel, label="Calculate")
         calcButton.Bind(wx.EVT_BUTTON, self.OnClick)
-        sizer.Add(calcButton, 1, wx.ALIGN_CENTER, 0)
+        vertical_layout.Add(calcButton, 0, wx.ALL | wx.ALIGN_CENTER, 10)
 
         #creating the output display box:
         #self.outText = wx.TextCtrl(self.panel, value = "Type in concentrations and press caclulate.", pos = (50,130), size=(200,100), style=wx.TE_READONLY | wx.TE_MULTILINE)
-        outText = wx.TextCtrl(self, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
-        sizer.Add(outText, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 20)
+        #outText = wx.TextCtrl(self, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
+        outText = wx.TextCtrl(panel, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
+        #sizer.Add(outText, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 2)
+        vertical_layout.Add(outText, 1, wx.EXPAND, 20)
+
+
+        panel.SetSizer(vertical_layout)
 
         
 
@@ -167,5 +215,6 @@ if __name__ == '__main__':
     # frame, show it, and start the event loop.
     app = wx.App()
     frm = BasicCalculator(None, title='Basic Calculator')
+    #frm.SetSizerAndFit(sizer, deleteOld=True)
     frm.Show()
     app.MainLoop()

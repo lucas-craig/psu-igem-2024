@@ -30,7 +30,7 @@ class converter:
     #var arrays and return them in a tuple. Assumes that indep. var is in first col and dep. var is in 2nd
     def __getDataFromTable(self):
         df = pd.read_excel(self.__get_path_to_tblOfVals(), 
-                    sheet_name=1, 
+                    sheet_name=0, 
                     usecols="A:B", #use cols A and B of dataset
                     #dtype={"A": np.float64, "B": np.int32}, #set col A datatype to float32, B to int32
                     skiprows=[0]) #skip first row (contains irrelevant notes; col names are in 2nd row)

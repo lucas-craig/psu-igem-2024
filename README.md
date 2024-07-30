@@ -1,7 +1,7 @@
 # psu-igem-2024
 
 ## About this Repo
-This repository contains the files for the ROSA project's conversion software. Our final goal is for this to be a simple, elegant, and lightweight desktop application that can be used by clinicians as a companion to our physical measurement system.
+This repository contains the files for the ROSA project's glucose-to-biomarker concentration conversion software. Our final goal is for this to be a simple, elegant, and lightweight desktop application that can be used by clinicians as a companion to our physical measurement system.
 
 Since we're still working on characterization, I have included a spreadsheet of placeholder data to use to experiment with Scipy's imputation tools. I will be replacing this with the real data once it becomes available (see roadmap).
 

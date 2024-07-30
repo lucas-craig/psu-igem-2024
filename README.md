@@ -10,9 +10,9 @@ Since we're still working on characterization, I have included a spreadsheet of 
 - *Backend:* Scipy, Numpy, Pandas (more may be added as needed)
 
 ## Roadmap:
-1. For now, I am focusing on getting the front- and backends working properly
+~~1. For now, I am focusing on getting the front- and backends working properly~~ *done! :)*
 2. Cleaning up and streamlining the code
-3. Overhauling toolbar implementation; adding support for several different conversions
+3. Overhauling toolbar implementation; adding support for several different biomarker conversions, glucometer models, and units
 4. Redesigning the frontend to use a grid sizer and more sophisticated colors and visual elements, including logo
 5. Packaging the program into an executable
 6. Adding final table of values from characterization experiments

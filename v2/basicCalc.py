@@ -144,7 +144,7 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         #self.outTextBox = wx.TextCtrl(panel, value = self.outMsg, style=wx.TE_READONLY | wx.TE_MULTILINE)
         #sizer.Add(outText, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 2)
         
-        self.outMsg = "Type in concentrations and press caclulate."
+        self.outMsg = "Type in concentrations and press convert."
         self.outTextBox = wx.TextCtrl(panel, value = self.outMsg, style=wx.TE_READONLY | wx.TE_MULTILINE)
         vertical_layout.Add(self.outTextBox, 1, wx.EXPAND | wx.BOTTOM, 0)
 

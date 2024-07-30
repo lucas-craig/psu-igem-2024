@@ -1,9 +1,13 @@
 # psu-igem-2024
 
 ## About this Repo
-This repository contains the files for the ROSA system conversion software application. Since we're still working on characterization, I have included a spreadsheet of placeholder data to use to experiment with Scipy's imputation tools. 
+This repository contains the files for the ROSA project's conversion software. Our final goal is for this to be a simple, elegant, and lightweight desktop application that can be used by clinicians as a companion to our physical measurement system.
 
-I have built the application using wxPython for the frontend and Scipy, Numpy, and Pandas for the backend. I may bring more libraries in as needed in the future.
+Since we're still working on characterization, I have included a spreadsheet of placeholder data to use to experiment with Scipy's imputation tools. I will be replacing this with the real data once it becomes available (see roadmap).
+
+## Libraries:
+- *Frontend:* wxPython
+- *Backend:* Scipy, Numpy, Pandas (more may be added as needed)
 
 ## Roadmap:
 1. For now, I am focusing on getting the front- and backends working properly

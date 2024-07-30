@@ -1,11 +1,9 @@
-"""
-Me playing around with the helloworld.py code
-"""
-
 import wx
-import wx.richtext
+#import wx.richtext
 import numpy as np
 import scipy as sp
+import conversionBackend as be
+import wx.lib.buttons as buttons
 
 sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -17,7 +15,8 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         wx.Frame.__init__(self, parent, title=title, size=(450, 300))
 
         #Create a panel to put all the buttons and text boxes
-        panel = wx.Panel(self)
+        panel = wx.Panel(self, style=wx.SUNKEN_BORDER)
+        panel.SetBackgroundColour((195,216,234))
         
         wx.TopLevelWindow.Center(self, wx.BOTH) #center window when it opens
         wx.TopLevelWindow.SetSizeHints(self, 450, 300, maxW=600, maxH=400) #setting min and max heights
@@ -38,6 +37,9 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         # Setting up the menu.
         filemenu= wx.Menu()
 
+        #btn2 = buttons.GenButton(panel, -1, "Hello World!", pos=(50, 100))
+        #btn2 = buttons.GenButton(panel, -1, "Hello World!")
+
         # wx.ID_ABOUT and wx.ID_EXIT are standard IDs provided by wxWidgets.
         filemenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
         filemenu.AppendSeparator()
@@ -56,16 +58,28 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
 
         #heading = wx.richtext.RichTextCtrl(panel, name="Basic Calculator", style=wx.ALIGN_CENTER_HORIZONTAL)
         #heading_text = "<b><big><span font_family='wx.FONTFAMILY_SWISS'>Basic Calculator</span></big></b>"
-        wx.SetLabelMarkup(heading_text)
+
+        #wx.SetLabelMarkup(heading_text)
         heading = wx.StaticText(panel, label="Basic Calculator", style=wx.ALIGN_CENTER_HORIZONTAL)
-        heading_font = wx.Font(wx.FontInfo(30).Family(wx.FONTFAMILY_SWISS).Bold())
+        #heading_font = wx.Font(wx.FontInfo(30).Family(wx.FONTFAMILY_SWISS).Bold())
+        """
         heading.SetLabelMarkup("<b>&ampBed</b> &ampmp "
-                     "<span foreground='red'>breakfast</span> "
+                     "<span foreground='purple'>breakfast</span> "
                      "available <big>HERE</big>")
+        """
+        #heading.SetLabelMarkup('<p><font color="#FF0000">Red paragraph text</font></p>')
+        
+        font = wx.Font(30, wx.DEFAULT, wx.MODERN, wx.NORMAL)
+        heading.SetFont(font)
+        
+        heading.SetForegroundColour((148,6,27))
+        heading.SetForegroundColour((125,51,56))
+       
+        #rgb(255, 0, 0)
+
         #heading.SetLabelMarkup(True)
 
-        vertical_layout.Add(heading, 1, wx.ALIGN_CENTER)
-        
+        vertical_layout.Add(heading, 0, wx.ALL | wx.ALIGN_CENTER, 20)
 
         #creating text entry boxes
         #text1 = wx.TextCtrl(panel)
@@ -74,6 +88,7 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         #text1 = wx.TextCtrl(panel, size=textbox_size)
         text1 = wx.TextCtrl(panel)
         text1.SetMaxSize(textbox_size)
+        text1.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)) 
 
         #panel.AddChild(text1)
         #text1.setLabel("Initial Concen. (mmol/L)")
@@ -84,6 +99,7 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         text2 = wx.TextCtrl(panel)
         text2.SetMaxSize(textbox_size)
         text2.SetLabel("Initial Concen. (mmol/L)")
+        text2.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)) 
 
         #sizer.Add(panel, 1, 0, 0)
         
@@ -103,7 +119,11 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         #creating the calculate button
         #calcButton = wx.Button(self.panel, label="Calculate", pos = (50,100))
         #calcButton = wx.Button(self, label="Calculate")
-        calcButton = wx.Button(panel, label="Calculate")
+        #calcButton = wx.Button(panel, label="Calculate")
+        calcButton = buttons.GenButton(panel, -1, label="Calculate")
+        #calcButton.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE))
+        calcButton.SetBackgroundColour((28,58,137))
+        #calcButton.SetFont()#OwnColour((28,58,137))
         calcButton.Bind(wx.EVT_BUTTON, self.OnClick)
         vertical_layout.Add(calcButton, 0, wx.ALL | wx.ALIGN_CENTER, 10)
 
@@ -112,7 +132,7 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         #outText = wx.TextCtrl(self, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
         outText = wx.TextCtrl(panel, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
         #sizer.Add(outText, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 2)
-        vertical_layout.Add(outText, 1, wx.EXPAND, 20)
+        vertical_layout.Add(outText, 1, wx.EXPAND | wx.BOTTOM, 0)
 
 
         panel.SetSizer(vertical_layout)

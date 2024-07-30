@@ -9,7 +9,7 @@ I have built the application using wxPython for the frontend and Scipy, Numpy, a
 1. For now, I am focusing on getting the front- and backends working properly
 2. Cleaning up and streamlining the code
 3. Overhauling toolbar implementation; adding support for several different conversions
-4. Redesigning the frontend to use a grid sizer and more sophisticated colors and visual elements
+4. Redesigning the frontend to use a grid sizer and more sophisticated colors and visual elements, including logo
 5. Packaging the program into an executable
 6. Adding final table of values from characterization experiments
 

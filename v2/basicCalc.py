@@ -8,8 +8,13 @@ import wx.lib.buttons as buttons
 sizer = wx.BoxSizer(wx.VERTICAL)
 
 class BasicCalculator(wx.Frame): #is the class really necessary?
-
-    contents = ""
+    
+    #input = (False, False)
+    #bfore_first_button_press = True
+    text1 = None
+    text2 = None
+    outTextBox = None
+    outMsg = ""
 
     def __init__(self, parent, title):
         wx.Frame.__init__(self, parent, title=title, size=(450, 300))
@@ -19,7 +24,8 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         panel.SetBackgroundColour((195,216,234))
         
         wx.TopLevelWindow.Center(self, wx.BOTH) #center window when it opens
-        wx.TopLevelWindow.SetSizeHints(self, 450, 300, maxW=600, maxH=400) #setting min and max heights
+        #wx.TopLevelWindow.SetSizeHints(self, 450, 300, maxW=600, maxH=400) #setting min and max heights
+        wx.TopLevelWindow.SetSizeHints(self, 450, 300, maxW=500, maxH=330)
         
 
         #setting up the sizer. 
@@ -86,29 +92,34 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         textbox_size = wx.Size(-1,25)
         #text1 = wx.TextCtrl(panel, size=wx.Size(30,10))
         #text1 = wx.TextCtrl(panel, size=textbox_size)
-        text1 = wx.TextCtrl(panel)
-        text1.SetMaxSize(textbox_size)
-        text1.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)) 
+        self.text1 = wx.TextCtrl(panel)
+        self.text1.SetMaxSize(textbox_size)
+        self.text1.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)) 
 
         #panel.AddChild(text1)
         #text1.setLabel("Initial Concen. (mmol/L)")
-        text1.SetLabel("Initial Concen. (mmol/L)")
+        self.text1.SetHint("Initial Glucose Reading (mg/dL)")
         #text2 = wx.TextCtrl(self, pos = (50,70))
         #text2 = wx.TextCtrl(panel)
         #text2 = wx.TextCtrl(panel, size=textbox_size)
-        text2 = wx.TextCtrl(panel)
-        text2.SetMaxSize(textbox_size)
-        text2.SetLabel("Initial Concen. (mmol/L)")
-        text2.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)) 
+        #self.text1.Bind()
+        #self.text1.Bind(wx.EVT_TEXT, self.OnTextClick)
 
+
+
+        self.text2 = wx.TextCtrl(panel)
+        self.text2.SetMaxSize(textbox_size)
+        self.text2.SetHint("Final Glucose Reading (mg/dL)")
+        self.text2.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)) 
+        
         #sizer.Add(panel, 1, 0, 0)
         
         #sizer.Add(text1, 1, wx.ALIGN_CENTER, 50)
         #sizer.Add(text2, 1, wx.ALIGN_CENTER, 50)
         #vertical_layout.Add(text1, 1, wx.SHAPED | wx.ALL | wx.ALIGN_CENTER, border=20)
         #vertical_layout.Add(text2, 1, wx.SHAPED | wx.ALL | wx.ALIGN_CENTER, border=20)
-        vertical_layout.Add(text1, 1, wx.ALL | wx.ALIGN_CENTER, border=10)
-        vertical_layout.Add(text2, 1, wx.ALL | wx.ALIGN_CENTER, border=10)
+        vertical_layout.Add(self.text1, 1, wx.ALL | wx.ALIGN_CENTER, border=10)
+        vertical_layout.Add(self.text2, 1, wx.ALL | wx.ALIGN_CENTER, border=10)
         #vertical_layout.Add(text1, 1, wx.ALIGN_CENTER, border=20)
         #vertical_layout.Add(text2, 1, wx.ALIGN_CENTER, border=20)
         #vertical_layout.Add(text1, 1, 0, border=20)
@@ -120,40 +131,118 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
         #calcButton = wx.Button(self.panel, label="Calculate", pos = (50,100))
         #calcButton = wx.Button(self, label="Calculate")
         #calcButton = wx.Button(panel, label="Calculate")
-        calcButton = buttons.GenButton(panel, -1, label="Calculate")
+        calcButton = buttons.GenButton(panel, -1, label="Convert")
         #calcButton.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE))
         calcButton.SetBackgroundColour((28,58,137))
         #calcButton.SetFont()#OwnColour((28,58,137))
-        calcButton.Bind(wx.EVT_BUTTON, self.OnClick)
+        calcButton.Bind(wx.EVT_BUTTON, self.OnButtonClick)
         vertical_layout.Add(calcButton, 0, wx.ALL | wx.ALIGN_CENTER, 10)
 
         #creating the output display box:
         #self.outText = wx.TextCtrl(self.panel, value = "Type in concentrations and press caclulate.", pos = (50,130), size=(200,100), style=wx.TE_READONLY | wx.TE_MULTILINE)
         #outText = wx.TextCtrl(self, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
-        outText = wx.TextCtrl(panel, value = "Type in concentrations and press caclulate.", style=wx.TE_READONLY | wx.TE_MULTILINE)
+        #self.outTextBox = wx.TextCtrl(panel, value = self.outMsg, style=wx.TE_READONLY | wx.TE_MULTILINE)
         #sizer.Add(outText, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 2)
-        vertical_layout.Add(outText, 1, wx.EXPAND | wx.BOTTOM, 0)
+        
+        self.outMsg = "Type in concentrations and press caclulate."
+        self.outTextBox = wx.TextCtrl(panel, value = self.outMsg, style=wx.TE_READONLY | wx.TE_MULTILINE)
+        vertical_layout.Add(self.outTextBox, 1, wx.EXPAND | wx.BOTTOM, 0)
 
+        """
+        if self.bfore_first_button_press:
+            self.outMsg = "Type in concentrations and press caclulate."
+
+        elif (not self.input[0] or not self.input[1]): #self.input[0] == False or self.input[1] == False:
+            self.outMsg = "Error: a glucose concentration is out of specified glucometer's measurement range."
+
+        elif not (self.input[0] >= 20 and self.input[0] <= 500) or not (self.input[1] >= 20 and self.input[1] <= 500):
+                
+                c = be.converter()
+                interpolatedVal = c.convertConcentration(input[0],input[1])
+                self.outMsg = "CA125: {:.3f} U/mL\n".format(interpolatedVal)
+                if interpolatedVal >= 35: 
+                    self.outMsg += "Abnormal: greater than or equal to 35"
+                else: 
+                    self.outMsg += "Normal: below 35"
+        
+        
+        else:
+            self.outMsg = "Something went wrong"
+        self.outText.SetValue(outMsg)
+        #self.UpdateOutputTextbox()
+        """
 
         panel.SetSizer(vertical_layout)
 
         
 
+    #def UpdateOutputTextbox(self):
+    #    self.outTextBox.SetValue(self.outMsg)
 
+    #id = EVT_TEXT_URL (??)
+    """
+    def OnTextClick(self, e):
+        #source = e.Source()
+        obj = e.GetEventObject()
+        print(obj.GetName())
+        return
+    """
 
     #button press event handler
-    def OnClick(self, e):
+    def OnButtonClick(self, e):
+
+        self.bfore_first_button_press = False
+
         #remove whitespace from text entered in each box
         contents1 = self.text1.GetValue().strip(' ')
+        #contents1 = self.GetValue().strip(' ')
         contents2 = self.text2.GetValue().strip(' ')
 
-        #initialize output message
-        outMsg = ""
+        #if there are non-numeric chars in input strings, return false.
+        #if not((contents1.isnumeric()) and (contents2.isnumeric())):
+        #   self.outMsg = "Error: only numeric values are accepted."
 
+        if not((contents1.isnumeric()) and (contents2.isnumeric())):
+           self.outMsg = "Error: only numeric values are accepted."
+        
+        #otherwise, extract values and return them in a tuple.
+        else:
+            val1 = float(contents1) #extract num from contents of first text box as float
+            val2 = float(contents2) #ditto for second text box
+            #self.input = (val1, val2)
+
+            if not (20 <= val1 <= 500) or not (20 <= val2 <= 500):
+                self.outMsg = "Error: a glucose concentration is out of specified glucometer measurement range."
+
+            else:
+                c = be.converter()
+
+                interpolatedVal = c.convertConcentration(val1,val2)
+                
+                if interpolatedVal == -1: #does this explanation make sense? - python interprets 0.0 as False so I made -1 the code for a significant decrease so as not to trip this conditional if a legitimate 0.0 was returned
+                    print(interpolatedVal)
+                    self.outMsg = "Error: glucose concentration decreased by more than standard deviation of selected glucometer."
+
+                else:
+                    self.outMsg = "CA125: {:.3f} U/mL\n".format(interpolatedVal)
+                    self.outMsg += "Abnormal: greater than or equal to 35" if interpolatedVal >= 35 else "Normal: below 35"
+
+                """
+                self.outMsg = "CA125: {:.3f} U/mL\n".format(interpolatedVal)
+                if interpolatedVal >= 35: 
+                    self.outMsg += "Abnormal: greater than or equal to 35"
+                else: 
+                    self.outMsg += "Normal: below 35"
+                """
+        
+        self.outTextBox.SetValue(self.outMsg)
+        #self.UpdateOutputTextbox()
+
+        """
         #if there are non-numeric chars in input strings, output error message.
         if not((contents1.isnumeric()) and (contents2.isnumeric())):
-           print(contents1.isnumeric())
-           print(contents2.isnumeric())
+           #print(contents1.isnumeric())
+           #print(contents2.isnumeric())
            outMsg = "Error: only numeric values are accepted."
         
         #otherwise, extract values and run the calculation
@@ -161,15 +250,19 @@ class BasicCalculator(wx.Frame): #is the class really necessary?
             val1 = float(contents1) #extract num from contents of first text box as float
             val2 = float(contents2) #ditto for second text box
 
-            score = abs(val2 - val1)/val1 * 100
+            if not (20 <= val1 <= 500) or not (20 <= val2 <= 500):
+                outMsg = "Error: a glucose concentration is out of specified glucometer measurement range."
 
 
-            outMsg = "StdErr: {:.3f}:\n".format(score)
-            if score < 30: 
-                outMsg += "Above 30%"
+            c = be.converter()
+            interpolatedVal = c.convertConcentration(contents1,contents2)
+            outMsg = "CA125: {:.3f} U/mL\n".format(interpolatedVal)
+            if interpolatedVal >= 35: 
+                outMsg += "Abnormal: greater than or equal to 35"
             else: 
-                outMsg += "Below 30%"
+                outMsg += "Normal: below 35"
         self.outText.SetValue(outMsg)
+        """
         
 
     def makeMenuBar(self):

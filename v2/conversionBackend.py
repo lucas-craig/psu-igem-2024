@@ -8,6 +8,12 @@ from scipy.interpolate import interp1d
 #TODO: ADD CSV SUPPORT
 #TODO: get constructor working properly. __path_to_tblOfVals never gets initialized
 
+
+"""
+Proceedure: 
+    - 
+"""
+
 class converter:
     
     __path_to_tblOfVals = "" #private attribute
